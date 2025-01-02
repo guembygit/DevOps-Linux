@@ -1,0 +1,140 @@
+Exercice:
+1. Créer deux groups nommés respectivement gestion et informatique
+   commandes:
+	sudo groupadd gestion
+	sudo groupadd informatique
+
+2. Créer les utilisateurs suivants: roger, mike, jurgen, ynes, achille, nasser et Arnauld avec à chacun un mot de passe.
+   commandes:
+	sudo adduser roger
+        sudo adduser mike
+        sudo adduser jurgen
+        sudo adduser ynes
+        sudo adduser achille
+        sudo adduser nasser
+        sudo adduser Arnauld
+
+3. Ajouter chaque utilisateur dans un groupe:
+  a. gestion: roger, mike, jurgen
+  b. informatique: ynes, achille, nasser et Arnauld
+   commandes:
+	sudo usermod -aG gestion roger
+	sudo usermod -aG gestion mike
+	sudo usermod -aG gestion jurgen
+	sudo usermod -aG informatique ynes
+	sudo usermod -aG informatique achille
+	sudo usermod -aG informatique nasser
+	sudo usermod -aG informatique arnauld
+
+4.Connectez vous sur le compte de roger
+  commandes:
+	su roger
+
+5. Créer dans son répertoire personnel un dossier appelé document
+   commandes:
+	mkdir ~/document
+
+6. Créer dans document le dossier cours et le fichier test
+   commandes:
+	mkdir ~/document/cours
+	touch ~/document/test
+
+7. Lister de façon détaillée le contenu du dossier document interpréter les résultats
+   commandes:
+	ls -l ~/document
+
+8. Quel est la commande utilisée pour modifier les droits d'un utilisateur sur un fichier
+   commandes:
+	chmod u+x fichier    # Ajoute l'exécution pour le propriétaire
+	chmod g-w fichier    # Retire l'écriture pour le groupe
+	chmod o=r fichier    # Donne uniquement la lecture aux autres
+
+
+9. Quelles sont les commandes utilisées pour respectivement modifier le propriétaire d'un fichier  et son groupe
+   commandes:
+	Pour le propriétaire:
+	sudo chown nouveau_propriétaire fichier
+   	
+	Pour modifier le groupe:
+	sudo chown :nouveau_groupe fichier
+
+
+10. Modifier le groupe propriétaire du dossier cours et du fichier test. Le nouveau groupe sera gestion
+    commandes:
+	sudo chown :gestion ~/document/cours
+	sudo chown :gestion ~/document/test
+
+
+11. Modifier les droits des utilisateurs sur le dossier cours et le fichier test de telle façon
+que:
+a. Le propriétaire ait les droits de lecture, d'écriture et d'exécution sur ces fichiers
+b. Le groupes propriétaire ait uniquement les droits de lecture et d'exécution
+c. Les autres utilisateurs n'aient aucun droit sur ces fichiers
+commandes:
+	# Propriétaire (roger) : lecture, écriture, exécution
+	chmod u=rwx ~/document/cours
+	chmod u=rwx ~/document/test
+
+	# Groupe (gestion) : lecture, exécution
+	chmod g=rx ~/document/cours
+	chmod g=rx ~/document/test
+
+	# Autres utilisateurs : aucun droit
+	chmod o= ~/document/cours
+	chmod o= ~/document/test
+		ou
+	sudo chmod 750 cours/
+	sudo chmod 750 test
+
+12. Utilisez les utilisateurs mike et ynes pour tester le bon fonctionnement de la configuration
+    commandes:
+	su - mike
+	cat ~/document/test  
+	Mike peut accèder aux ressources créées par roger puisqu'ils appartiennent aux
+	même groupe gestion
+
+	su - ynes
+	cat ~/document/test 
+	Ynes n'a pas accès aux ressources créées par roger car elle ne fait partir du
+	du même groupe roger.
+
+13. L'utilisateur achille peut-il supprimer le fichier test ? Justifier votre réponse
+    commandes:
+	-L'utilisateur achille appartient au groupe informatique, mais le groupe propriétaire du fichier test est gestion. Le groupe informatique n'a que des droits de lecture et d'exécution, il ne peut donc pas supprimer le fichier, sauf si les droits sont modifiés.
+
+14. Que peut faire l'utilisateur jurgen sur ce fichier ?
+    commandes:
+	-jurgen appartient au groupe gestion et a des droits de lecture et d'exécution sur le fichier, il peut donc seulement lire et exécuter le fichier, mais pas le modifier ou le supprimer
+
+15. Que faire les commandes chmod 777 cours et chmod 654 test ?
+	-chmod 777 cours : Donne tous les droits (lecture, écriture, exécution) à tous les utilisateurs (propriétaire, groupe et       autres).
+	-chmod 654 test : Donne au propriétaire (6) des droits de lecture et écriture, au groupe (5) des droits de lecture et     exécution, et aux autres utilisateurs (4) uniquement des droits de lecture.
+
+16. Connectez-vous avec l'utilisateur nasser et utilisez la commande echo pour écrire la
+phrase suivante dans le fichier test: "Je vais réussir". Commentez les résultats
+commandes:
+	su nasser: Nasser ne possède pas les droits sur ce fichier.
+
+17. Modifiez les groupes principaux de chaque utilisateur conformément à la question 
+  a. les utilisateurs du groupe gestion doivent désormais appartenir au groupe informatique et ceux 
+     du groupe informatique au groupe gestion.
+     commandes:
+	sudo usermod -aG informatique roger
+	sudo usermod -aG informatique mike
+	sudo usermod -aG informatique jurgen
+	sudo usermod -aG gestion ynes
+	sudo usermod -aG gestion achille
+	sudo usermod -aG gestion nasser
+	sudo usermod -aG gestion Arnauld
+
+18. Modifier le propriétaire du fichier test. Le nouveau propriétaire s'appelle ynes
+    commandes:
+	sudo chown ynes ~/document/test
+
+19. Créer dans votre répertoire personnel un fichier nommé exemple dans documents
+    commandes:
+	touch ~/document/exemple
+
+20. Faites en sorte que le propriétaire de ce fichier soit arnauld et son groupe propriétaire soit gestion
+    commandes:
+	sudo chown arnauld:gestion ~/document/exemple
